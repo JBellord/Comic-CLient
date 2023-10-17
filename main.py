@@ -16,7 +16,7 @@ def main():
     for i in issue_info:
         print(f"({x}) {list(i.keys())[0]}")
         x += 1
-    issue_no = int(input("Enter Issue ID:  "))
+    issue_no = int(input("\nEnter Issue ID:  "))
     selected_issue = issue_info[issue_no - 1]
     selected_issue_src = list(selected_issue.values())[0]
     filename = (

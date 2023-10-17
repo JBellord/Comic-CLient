@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 from bs4 import BeautifulSoup as bs
 from PIL import Image
 import requests as rq
@@ -11,7 +11,7 @@ search_url = "https://readcomicsbook.net/ajax/search?q="
 url = "https://readcomicsbook.net/comic/"
 os.environ[
     "DROPBOX_KEY"
-] = "sl.BnubEwJzQT9IWO1BaqXQxomsFvcrMAge16ianeLijLUXB0aUoQvCkipQzh-JxGCEK0H1fNNqw40UjuitRAyVL7Mfy4mgezry8p5kEANyl53aRF2VC_BG2TP8dzYOditIXbBsXFQm5ifpfo31b4mseFE"
+] = "sl.BoHOqhlKxGin_RaBVPAGbDtrAFgajJYxnUPhNMJu_uUX2nIVZZHLPpD6mp25YFhvQmZ86f0d9jWoEQTR_16TC4sRHdTk5CIyN9Vq3lV6H1BjyBHhcTwcE7WyYyEl9GFk5B2BRll2KpYoUC3Mhvtd0t8"
 
 
 def search(query: str):
@@ -20,7 +20,7 @@ def search(query: str):
     if response.status_code == 200:
         uuid = 1
         results = response.json()["data"]
-        print(f"{results} Available Titles:")
+        print(f"\n{len(results)} Available Titles:")
         for i in results:
             print(f"({uuid}) Title: {i['title']}")
             uuid += 1
@@ -79,3 +79,7 @@ def upload_comics(filename):
             f"/comics/{filename}.pdf",
             mode=dropbox.files.WriteMode("overwrite"),
         )
+
+
+if __name__ == "__main__":
+    upload_comics("midnight-suns-issue-#1")
