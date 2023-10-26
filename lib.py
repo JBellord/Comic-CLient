@@ -62,7 +62,7 @@ def images_to_pdf(src_list, name):
         image = img.convert("RGB")
         image_list.append(image)
     image_list[0].save(
-        f"/home/xavin/Documents/Projects/comics/{name}.pdf",
+        f"{name}.pdf",
         "PDF",
         resolution=100.0,
         save_all=True,
