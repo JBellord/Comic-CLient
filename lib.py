@@ -79,3 +79,6 @@ def upload_comics(filename):
             f"/comics/{filename}.pdf",
             mode=dropbox.files.WriteMode("overwrite"),
         )
+
+if __name__ == "__main__":
+    upload_comics("g-o-d-s-issue-#1")
