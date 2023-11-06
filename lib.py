@@ -1,18 +1,13 @@
 #!/usr/bin/env python3
 from bs4 import BeautifulSoup as bs
 from PIL import Image
+from dotenv import load_dotenv
 import requests as rq
 import dropbox
-import os
-
-# import webbrowser as wb
+import os, sys
 
 search_url = "https://readcomicsbook.net/ajax/search?q="
 url = "https://readcomicsbook.net/comic/"
-os.environ[
-    "DROPBOX_KEY"
-] = "sl.BoHOqhlKxGin_RaBVPAGbDtrAFgajJYxnUPhNMJu_uUX2nIVZZHLPpD6mp25YFhvQmZ86f0d9jWoEQTR_16TC4sRHdTk5CIyN9Vq3lV6H1BjyBHhcTwcE7WyYyEl9GFk5B2BRll2KpYoUC3Mhvtd0t8"
-
 
 def search(query: str):
     search_query = search_url + query
@@ -20,14 +15,17 @@ def search(query: str):
     if response.status_code == 200:
         uuid = 1
         results = response.json()["data"]
-        print(f"\n{len(results)} Available Titles:")
-        for i in results:
-            print(f"({uuid}) Title: {i['title']}")
-            uuid += 1
-        return results
+        if len(results) > 0:
+            print(f"\n{len(results)} Available Titles:")
+            for i in results:
+                print(f"({uuid}) Title: {i['title']}")
+                uuid += 1
+            return results
+        else:
+            print(f"Couldn't find '{query}'")
+            sys.exit()
     else:
         return reponse.status_code
-
 
 def get_comic_info(slug: str):
     response = rq.get(url + slug)
@@ -41,7 +39,6 @@ def get_comic_info(slug: str):
     else:
         return response.status_code
 
-
 def get_comic_issue(url: str):
     slug_url = url + "/all"
     response = rq.get(slug_url)
@@ -54,7 +51,6 @@ def get_comic_issue(url: str):
     else:
         return response.status_code
 
-
 def images_to_pdf(src_list, name):
     image_list = []
     for src in src_list:
@@ -62,7 +58,7 @@ def images_to_pdf(src_list, name):
         image = img.convert("RGB")
         image_list.append(image)
     image_list[0].save(
-        f"{name}.pdf",
+        f"/home/jio/Comics/{name}.pdf",
         "PDF",
         resolution=100.0,
         save_all=True,
@@ -70,10 +66,24 @@ def images_to_pdf(src_list, name):
     )
     print("Download Finshed!")
 
+def delete_comic(location: str):
+    try:
+        if os.path.exists(f"/home/jio/Comics/{location}.pdf"):
+            os.remove(f"/home/jio/Comics/{location}.pdf")
+        else:
+            print("No such file")
+    except:
+        sys.exit()
 
 def upload_comics(filename):
-    dbx = dropbox.Dropbox(os.environ.get("DROPBOX_KEY"))
-    with open(f"{filename}.pdf", "rb") as f:
+    load_dotenv()
+    dbx = dropbox.Dropbox(
+        app_key=os.environ.get("DROPBOX_KEY"),
+        app_secret=os.environ.get("DROPBOX_SECRET"),
+        oauth2_refresh_token=os.environ.get("DROPBOX_REFRESH_TOKEN"),
+        timeout=None
+    )
+    with open(f"/home/jio/Comics/{filename}.pdf", "rb") as f:
         dbx.files_upload(
             f.read(),
             f"/comics/{filename}.pdf",
@@ -81,4 +91,4 @@ def upload_comics(filename):
         )
 
 if __name__ == "__main__":
-    upload_comics("g-o-d-s-issue-#1")
+    upload_comics("the-sixth-gun-issue-#tpb-3")

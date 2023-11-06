@@ -29,20 +29,10 @@ def main():
     print("-----------------------------------------")
     images_to_pdf(get_comic_issue(selected_issue_src), filename)
     print("-----------------------------------------")
-    upload = input("Upload Comic? [y/n]:  ")
-    if upload == "y":
-        try:
-            upload_comics(filename=filename)
-            print("-----------------------------------------")
-            print("Upload Completed.\nExiting program....")
-            sys.exit()
-        except:
-            print(
-                "Error: An error occurred in uploading sequence.\n Exting program...."
-            )
-            sys.exit()
-    else:
-        sys.exit()
+    print("Uploading, please wait")
+    print("-----------------------------------------")
+    upload_comics(filename=filename)
+    print("Done!")
 
 
 if __name__ == "__main__":
