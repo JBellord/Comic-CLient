@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 from bs4 import BeautifulSoup as bs
 from PIL import Image
 from dotenv import load_dotenv
@@ -64,18 +65,8 @@ def images_to_pdf(src_list, name):
         save_all=True,
         append_images=image_list[1:],
     )
-    print("Download Finshed!")
 
-def delete_comic(location: str):
-    try:
-        if os.path.exists(f"/home/jio/Comics/{location}.pdf"):
-            os.remove(f"/home/jio/Comics/{location}.pdf")
-        else:
-            print("No such file")
-    except:
-        sys.exit()
-
-def upload_comics(filename):
+def upload_comics(filename: str):
     load_dotenv()
     dbx = dropbox.Dropbox(
         app_key=os.environ.get("DROPBOX_KEY"),
@@ -90,5 +81,13 @@ def upload_comics(filename):
             mode=dropbox.files.WriteMode("overwrite"),
         )
 
+def delete_comic(location: str):
+    try:
+        if os.path.exists(f"/home/jio/Comics/{location}.pdf"):
+            os.remove(f"/home/jio/Comics/{location}.pdf")
+        else:
+            print("No such file")
+    except:
+        sys.exit()
 if __name__ == "__main__":
     upload_comics("the-sixth-gun-issue-#tpb-3")
