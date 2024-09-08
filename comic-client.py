@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from lib import search, images_to_pdf, get_comic_info, get_comic_issue, upload_comics
+from azcomix import search, images_to_pdf, get_comic_info, get_comic_issue, upload_comics
 import sys
 from rich.console import Console
 

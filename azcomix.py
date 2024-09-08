@@ -7,8 +7,8 @@ import requests as rq
 import dropbox
 import os, sys
 
-search_url = "https://readcomicsbook.net/ajax/search?q="
-url = "https://readcomicsbook.net/comic/"
+search_url = "https://azcomix.me/ajax/search?q="
+url = "https://azcomix.net/comic/"
 
 def search(query: str):
     search_query = search_url + query
@@ -26,7 +26,7 @@ def search(query: str):
             print(f"Couldn't find '{query}'")
             sys.exit()
     else:
-        return reponse.status_code
+        return response.status_code
 
 def get_comic_info(slug: str):
     response = rq.get(url + slug)
@@ -89,5 +89,7 @@ def delete_comic(location: str):
             print("No such file")
     except:
         sys.exit()
+
+
 if __name__ == "__main__":
-    upload_comics("the-sixth-gun-issue-#tpb-3")
+    search("sandman overture")
