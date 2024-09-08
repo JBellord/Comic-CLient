@@ -10,6 +10,7 @@ import os, sys
 search_url = "https://azcomix.me/ajax/search?q="
 url = "https://azcomix.net/comic/"
 
+
 def search(query: str):
     search_query = search_url + query
     response = rq.get(search_query)
@@ -28,6 +29,7 @@ def search(query: str):
     else:
         return response.status_code
 
+
 def get_comic_info(slug: str):
     response = rq.get(url + slug)
     if response.status_code == 200:
@@ -39,6 +41,7 @@ def get_comic_info(slug: str):
             yield {src.text: src["href"]}
     else:
         return response.status_code
+
 
 def get_comic_issue(url: str):
     slug_url = url + "/all"
@@ -52,6 +55,7 @@ def get_comic_issue(url: str):
     else:
         return response.status_code
 
+
 def images_to_pdf(src_list, name):
     image_list = []
     for src in src_list:
@@ -59,12 +63,13 @@ def images_to_pdf(src_list, name):
         image = img.convert("RGB")
         image_list.append(image)
     image_list[0].save(
-        f"/home/jio/Comics/{name}.pdf",
+        f"./{name}.pdf",
         "PDF",
         resolution=100.0,
         save_all=True,
         append_images=image_list[1:],
     )
+
 
 def upload_comics(filename: str):
     load_dotenv()
@@ -72,19 +77,20 @@ def upload_comics(filename: str):
         app_key=os.environ.get("DROPBOX_KEY"),
         app_secret=os.environ.get("DROPBOX_SECRET"),
         oauth2_refresh_token=os.environ.get("DROPBOX_REFRESH_TOKEN"),
-        timeout=None
+        timeout=None,
     )
-    with open(f"/home/jio/Comics/{filename}.pdf", "rb") as f:
+    with open(f"./{filename}.pdf", "rb") as f:
         dbx.files_upload(
             f.read(),
             f"/comics/{filename}.pdf",
             mode=dropbox.files.WriteMode("overwrite"),
         )
 
+
 def delete_comic(location: str):
     try:
-        if os.path.exists(f"/home/jio/Comics/{location}.pdf"):
-            os.remove(f"/home/jio/Comics/{location}.pdf")
+        if os.path.exists(f"./{location}.pdf"):
+            os.remove(f"./{location}.pdf")
         else:
             print("No such file")
     except:
